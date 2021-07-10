@@ -19,57 +19,67 @@ public class friends extends transactions{
      */
     // create a hashmap to store the vertex and the list of
     // vertices it's connected to
-    private Map<Integer, List<Integer> > map = new HashMap<>();
+    protected static Map<Integer, List<Integer> > map = new HashMap<>();
 
-    public void saveData() throws IOException {
+    public static void saveData() throws IOException {
         try {
-            FileOutputStream fileOut =
-                    new FileOutputStream("data/friends.ser");
-            ObjectOutputStream out = new ObjectOutputStream(fileOut);
-            out.writeObject(map);
-            out.close();
-            fileOut.close();
-            System.out.println("Serialized data is saved in data/friends.ser"); }
-        catch (IOException i) { i.printStackTrace(); }
+            FileOutputStream myFileOutStream
+                    = new FileOutputStream(
+                    "data/friends.txt");
+
+            ObjectOutputStream myObjectOutStream
+                    = new ObjectOutputStream(myFileOutStream);
+
+            myObjectOutStream.writeObject(map);
+
+            // closing FileOutputStream and
+            // ObjectOutputStream
+            myObjectOutStream.close();
+            myFileOutStream.close();
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
-    public void loadData() throws IOException {
+    public static void loadData() throws IOException {
         //https://www.geeksforgeeks.org/how-to-serialize-hashmap-in-java/
         HashMap<String, String> newHashMap = null;
 
         try {
             FileInputStream fileInput = new FileInputStream(
-                    "data/friends.ser");
+                    "data/friends.txt");
 
             ObjectInputStream objectInput
                     = new ObjectInputStream(fileInput);
 
-            newHashMap = (HashMap) objectInput.readObject();
+            newHashMap = (HashMap)objectInput.readObject();
 
             objectInput.close();
             fileInput.close();
-        } catch (IOException obj1) {
+        }
+
+        catch (IOException obj1) {
             obj1.printStackTrace();
             return;
-        } catch (ClassNotFoundException obj2) {
+        }
+
+        catch (ClassNotFoundException obj2) {
             System.out.println("Class not found");
             obj2.printStackTrace();
             return;
         }
 
-        System.out.println("Deserializing  HashMap..");
-
-        // Displaying content in "newHashMap.txt" using
         // Iterator
         Set set = newHashMap.entrySet();
         Iterator iterator = set.iterator();
 
         while (iterator.hasNext()) {
-            Map.Entry entry = (Map.Entry) iterator.next();
+            Map.Entry entry = (Map.Entry)iterator.next();
 
-//            System.out.print("key : " + entry.getKey()
-//                    + " & Value : ");
-//            System.out.println(entry.getValue());
+            System.out.print("key : " + entry.getKey()
+                    + " & Value : ");
+            System.out.println(entry.getValue());
         }
     }
 
@@ -78,7 +88,7 @@ public class friends extends transactions{
         map.put(account.UID, new LinkedList<Integer>());
     }
 
-    public void addFriend(bank src, bank dest) {
+    public void addFriend(bank src, bank dest) throws IOException {
         // Insert an edge between friend 1 and friend 2 (src & dest)
         // First check if src is in the map
         if (!map.containsKey(src.UID)) {
@@ -89,12 +99,16 @@ public class friends extends transactions{
         // Now add an edge
         map.get(src.UID).add(dest.UID);
         map.get(dest.UID).add(src.UID);
+        saveData();
     }
 
-    public ArrayList<Integer> seeFriends(bank src) {
-        ArrayList<Integer> friendList = new ArrayList();
-        for (int i = 0; i < map.size(); i++) {
-            friendList.add(map.get(src.UID).get(i));
+    public static ArrayList<Integer> seeFriends(bank src) throws IOException {
+        loadData();
+        ArrayList<Integer> friendList = new ArrayList<Integer>();
+        for (int i = 0; i < map.size() - 1; i++) {
+            List<Integer> item = map.get(src.UID);
+            System.out.println("item: " + item);
+            friendList.add(item.get(i));
         }
         return friendList;
     }

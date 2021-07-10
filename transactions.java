@@ -42,7 +42,6 @@ public class transactions extends bank {
             PrintWriter pw = new PrintWriter(bw);
 
             Scanner sc = new Scanner(new File(filepath));
-            sc.next();
             sc.useDelimiter("[,\n]");
 
             while (sc.hasNext()) {
