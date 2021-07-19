@@ -124,7 +124,7 @@ public class interaction {
             }
         });
         friendsList.setFont(f);
-        friendsList.setBounds(10,200,230,40);
+        friendsList.setBounds(10,200,160,40);
         panel.add(friendsList);
 
         JLabel friendUID = new JLabel("Friend UID");
@@ -169,13 +169,14 @@ public class interaction {
 
         panel.setLayout(null);
         ArrayList<Integer> lst= new ArrayList<Integer>();
-//        lst = friends.seeFriends(account);
-        friends map = new friends();
-        map.loadData();
-        List<Integer> friendArray = map.map.get(account);
+        lst = friends.seeFriends(account);
+//        System.out.println(lst);
+//        friends map = new friends();
+//        map.loadData();
+//        List<Integer> friendArray = map.map.get(account);
         for (int i = 0; i < lst.size(); i++) {
             String UID = String.valueOf(lst.get(i));
-            JLabel label = new JLabel(String.valueOf(friendArray.get(i)));
+            JLabel label = new JLabel(UID);
             label.setFont(f);
             label.setBounds(180, curr_y, 200, 25);
             curr_y += 30;

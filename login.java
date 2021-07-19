@@ -72,6 +72,7 @@ public class login implements ActionListener {
                         bank account = bank.fetchAccount(firstName, lastName, PIN);
                         assert account != null;
                         interaction.interactionScreen(account);
+                        frame.dispose();
                     }
 
                 } catch (IOException ioException) {

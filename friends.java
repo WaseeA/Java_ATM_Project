@@ -42,9 +42,9 @@ public class friends extends transactions{
         }
     }
 
-    public static void loadData() throws IOException {
+    public static HashMap<Integer, List<Integer>> loadData() throws IOException {
         //https://www.geeksforgeeks.org/how-to-serialize-hashmap-in-java/
-        HashMap<String, String> newHashMap = null;
+        HashMap<Integer, List<Integer>> newHashMap = null;
 
         try {
             FileInputStream fileInput = new FileInputStream(
@@ -61,26 +61,15 @@ public class friends extends transactions{
 
         catch (IOException obj1) {
             obj1.printStackTrace();
-            return;
+            return newHashMap;
         }
 
         catch (ClassNotFoundException obj2) {
             System.out.println("Class not found");
             obj2.printStackTrace();
-            return;
-        }
-
-        // Iterator
-        Set set = newHashMap.entrySet();
-        Iterator iterator = set.iterator();
-
-        while (iterator.hasNext()) {
-            Map.Entry entry = (Map.Entry)iterator.next();
-
-            System.out.print("key : " + entry.getKey()
-                    + " & Value : ");
-            System.out.println(entry.getValue());
-        }
+            return null;
+            }
+        return newHashMap;
     }
 
     public void addPerson(bank account) {
@@ -103,12 +92,10 @@ public class friends extends transactions{
     }
 
     public static ArrayList<Integer> seeFriends(bank src) throws IOException {
-        loadData();
+        HashMap<Integer, List<Integer>> map1 = loadData();
         ArrayList<Integer> friendList = new ArrayList<Integer>();
-        for (int i = 0; i < map.size() - 1; i++) {
-            List<Integer> item = map.get(src.UID);
-            System.out.println("item: " + item);
-            friendList.add(item.get(i));
+        for (int i = 0; i < Objects.requireNonNull(map1).size() - 1; i++) {
+            friendList.add(map1.get(src.UID).get(i));
         }
         return friendList;
     }
